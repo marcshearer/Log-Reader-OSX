@@ -13,6 +13,7 @@
 		B2D8100A2259AB02005A86A5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2D810082259AB02005A86A5 /* Main.storyboard */; };
 		B2D810162259AB03005A86A5 /* Log_Reader_OSXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810152259AB03005A86A5 /* Log_Reader_OSXTests.swift */; };
 		B2D810212259AB03005A86A5 /* Log_Reader_OSXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810202259AB03005A86A5 /* Log_Reader_OSXUITests.swift */; };
+		B2D8102F2259ACA3005A86A5 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D8102E2259ACA3005A86A5 /* Utility.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		B2D8101C2259AB03005A86A5 /* Log Reader OSXUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Log Reader OSXUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2D810202259AB03005A86A5 /* Log_Reader_OSXUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log_Reader_OSXUITests.swift; sourceTree = "<group>"; };
 		B2D810222259AB03005A86A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B2D8102E2259ACA3005A86A5 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				B2D810082259AB02005A86A5 /* Main.storyboard */,
 				B2D8100B2259AB02005A86A5 /* Info.plist */,
 				B2D8100C2259AB02005A86A5 /* Log_Reader_OSX.entitlements */,
+				B2D8102E2259ACA3005A86A5 /* Utility.swift */,
 			);
 			path = "Log Reader OSX";
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 			files = (
 				B2D810052259AB01005A86A5 /* ViewController.swift in Sources */,
 				B2D810032259AB01005A86A5 /* AppDelegate.swift in Sources */,
+				B2D8102F2259ACA3005A86A5 /* Utility.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
