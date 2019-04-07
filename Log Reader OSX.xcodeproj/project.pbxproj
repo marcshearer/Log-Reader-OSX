@@ -1,0 +1,582 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B2D810032259AB01005A86A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810022259AB01005A86A5 /* AppDelegate.swift */; };
+		B2D810052259AB01005A86A5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810042259AB01005A86A5 /* ViewController.swift */; };
+		B2D810072259AB02005A86A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2D810062259AB02005A86A5 /* Assets.xcassets */; };
+		B2D8100A2259AB02005A86A5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2D810082259AB02005A86A5 /* Main.storyboard */; };
+		B2D810162259AB03005A86A5 /* Log_Reader_OSXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810152259AB03005A86A5 /* Log_Reader_OSXTests.swift */; };
+		B2D810212259AB03005A86A5 /* Log_Reader_OSXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810202259AB03005A86A5 /* Log_Reader_OSXUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B2D810122259AB03005A86A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B2D80FF72259AB01005A86A5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B2D80FFE2259AB01005A86A5;
+			remoteInfo = "Log Reader OSX";
+		};
+		B2D8101D2259AB03005A86A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B2D80FF72259AB01005A86A5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B2D80FFE2259AB01005A86A5;
+			remoteInfo = "Log Reader OSX";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		B2D80FFF2259AB01005A86A5 /* Log Reader OSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Log Reader OSX.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2D810022259AB01005A86A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B2D810042259AB01005A86A5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B2D810062259AB02005A86A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B2D810092259AB02005A86A5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B2D8100B2259AB02005A86A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B2D8100C2259AB02005A86A5 /* Log_Reader_OSX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Log_Reader_OSX.entitlements; sourceTree = "<group>"; };
+		B2D810112259AB03005A86A5 /* Log Reader OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Log Reader OSXTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2D810152259AB03005A86A5 /* Log_Reader_OSXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log_Reader_OSXTests.swift; sourceTree = "<group>"; };
+		B2D810172259AB03005A86A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B2D8101C2259AB03005A86A5 /* Log Reader OSXUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Log Reader OSXUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2D810202259AB03005A86A5 /* Log_Reader_OSXUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log_Reader_OSXUITests.swift; sourceTree = "<group>"; };
+		B2D810222259AB03005A86A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B2D80FFC2259AB01005A86A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2D8100E2259AB03005A86A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2D810192259AB03005A86A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B2D80FF62259AB01005A86A5 = {
+			isa = PBXGroup;
+			children = (
+				B2D810012259AB01005A86A5 /* Log Reader OSX */,
+				B2D810142259AB03005A86A5 /* Log Reader OSXTests */,
+				B2D8101F2259AB03005A86A5 /* Log Reader OSXUITests */,
+				B2D810002259AB01005A86A5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B2D810002259AB01005A86A5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B2D80FFF2259AB01005A86A5 /* Log Reader OSX.app */,
+				B2D810112259AB03005A86A5 /* Log Reader OSXTests.xctest */,
+				B2D8101C2259AB03005A86A5 /* Log Reader OSXUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B2D810012259AB01005A86A5 /* Log Reader OSX */ = {
+			isa = PBXGroup;
+			children = (
+				B2D810022259AB01005A86A5 /* AppDelegate.swift */,
+				B2D810042259AB01005A86A5 /* ViewController.swift */,
+				B2D810062259AB02005A86A5 /* Assets.xcassets */,
+				B2D810082259AB02005A86A5 /* Main.storyboard */,
+				B2D8100B2259AB02005A86A5 /* Info.plist */,
+				B2D8100C2259AB02005A86A5 /* Log_Reader_OSX.entitlements */,
+			);
+			path = "Log Reader OSX";
+			sourceTree = "<group>";
+		};
+		B2D810142259AB03005A86A5 /* Log Reader OSXTests */ = {
+			isa = PBXGroup;
+			children = (
+				B2D810152259AB03005A86A5 /* Log_Reader_OSXTests.swift */,
+				B2D810172259AB03005A86A5 /* Info.plist */,
+			);
+			path = "Log Reader OSXTests";
+			sourceTree = "<group>";
+		};
+		B2D8101F2259AB03005A86A5 /* Log Reader OSXUITests */ = {
+			isa = PBXGroup;
+			children = (
+				B2D810202259AB03005A86A5 /* Log_Reader_OSXUITests.swift */,
+				B2D810222259AB03005A86A5 /* Info.plist */,
+			);
+			path = "Log Reader OSXUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B2D80FFE2259AB01005A86A5 /* Log Reader OSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B2D810252259AB03005A86A5 /* Build configuration list for PBXNativeTarget "Log Reader OSX" */;
+			buildPhases = (
+				B2D80FFB2259AB01005A86A5 /* Sources */,
+				B2D80FFC2259AB01005A86A5 /* Frameworks */,
+				B2D80FFD2259AB01005A86A5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Log Reader OSX";
+			productName = "Log Reader OSX";
+			productReference = B2D80FFF2259AB01005A86A5 /* Log Reader OSX.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B2D810102259AB03005A86A5 /* Log Reader OSXTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B2D810282259AB03005A86A5 /* Build configuration list for PBXNativeTarget "Log Reader OSXTests" */;
+			buildPhases = (
+				B2D8100D2259AB03005A86A5 /* Sources */,
+				B2D8100E2259AB03005A86A5 /* Frameworks */,
+				B2D8100F2259AB03005A86A5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B2D810132259AB03005A86A5 /* PBXTargetDependency */,
+			);
+			name = "Log Reader OSXTests";
+			productName = "Log Reader OSXTests";
+			productReference = B2D810112259AB03005A86A5 /* Log Reader OSXTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B2D8101B2259AB03005A86A5 /* Log Reader OSXUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B2D8102B2259AB03005A86A5 /* Build configuration list for PBXNativeTarget "Log Reader OSXUITests" */;
+			buildPhases = (
+				B2D810182259AB03005A86A5 /* Sources */,
+				B2D810192259AB03005A86A5 /* Frameworks */,
+				B2D8101A2259AB03005A86A5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B2D8101E2259AB03005A86A5 /* PBXTargetDependency */,
+			);
+			name = "Log Reader OSXUITests";
+			productName = "Log Reader OSXUITests";
+			productReference = B2D8101C2259AB03005A86A5 /* Log Reader OSXUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B2D80FF72259AB01005A86A5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1020;
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = "Marc Shearer";
+				TargetAttributes = {
+					B2D80FFE2259AB01005A86A5 = {
+						CreatedOnToolsVersion = 10.2;
+					};
+					B2D810102259AB03005A86A5 = {
+						CreatedOnToolsVersion = 10.2;
+						TestTargetID = B2D80FFE2259AB01005A86A5;
+					};
+					B2D8101B2259AB03005A86A5 = {
+						CreatedOnToolsVersion = 10.2;
+						TestTargetID = B2D80FFE2259AB01005A86A5;
+					};
+				};
+			};
+			buildConfigurationList = B2D80FFA2259AB01005A86A5 /* Build configuration list for PBXProject "Log Reader OSX" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B2D80FF62259AB01005A86A5;
+			productRefGroup = B2D810002259AB01005A86A5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B2D80FFE2259AB01005A86A5 /* Log Reader OSX */,
+				B2D810102259AB03005A86A5 /* Log Reader OSXTests */,
+				B2D8101B2259AB03005A86A5 /* Log Reader OSXUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B2D80FFD2259AB01005A86A5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2D810072259AB02005A86A5 /* Assets.xcassets in Resources */,
+				B2D8100A2259AB02005A86A5 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2D8100F2259AB03005A86A5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2D8101A2259AB03005A86A5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B2D80FFB2259AB01005A86A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2D810052259AB01005A86A5 /* ViewController.swift in Sources */,
+				B2D810032259AB01005A86A5 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2D8100D2259AB03005A86A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2D810162259AB03005A86A5 /* Log_Reader_OSXTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2D810182259AB03005A86A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2D810212259AB03005A86A5 /* Log_Reader_OSXUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B2D810132259AB03005A86A5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B2D80FFE2259AB01005A86A5 /* Log Reader OSX */;
+			targetProxy = B2D810122259AB03005A86A5 /* PBXContainerItemProxy */;
+		};
+		B2D8101E2259AB03005A86A5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B2D80FFE2259AB01005A86A5 /* Log Reader OSX */;
+			targetProxy = B2D8101D2259AB03005A86A5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B2D810082259AB02005A86A5 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B2D810092259AB02005A86A5 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B2D810232259AB03005A86A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B2D810242259AB03005A86A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		B2D810262259AB03005A86A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Log Reader OSX/Log_Reader_OSX.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 3T7CT2S464;
+				INFOPLIST_FILE = "Log Reader OSX/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MarcShearer.Log-Reader-OSX";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		B2D810272259AB03005A86A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Log Reader OSX/Log_Reader_OSX.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 3T7CT2S464;
+				INFOPLIST_FILE = "Log Reader OSX/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MarcShearer.Log-Reader-OSX";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B2D810292259AB03005A86A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 3T7CT2S464;
+				INFOPLIST_FILE = "Log Reader OSXTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MarcShearer.Log-Reader-OSXTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Log Reader OSX.app/Contents/MacOS/Log Reader OSX";
+			};
+			name = Debug;
+		};
+		B2D8102A2259AB03005A86A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 3T7CT2S464;
+				INFOPLIST_FILE = "Log Reader OSXTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MarcShearer.Log-Reader-OSXTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Log Reader OSX.app/Contents/MacOS/Log Reader OSX";
+			};
+			name = Release;
+		};
+		B2D8102C2259AB03005A86A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 3T7CT2S464;
+				INFOPLIST_FILE = "Log Reader OSXUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MarcShearer.Log-Reader-OSXUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Log Reader OSX";
+			};
+			name = Debug;
+		};
+		B2D8102D2259AB03005A86A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 3T7CT2S464;
+				INFOPLIST_FILE = "Log Reader OSXUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MarcShearer.Log-Reader-OSXUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Log Reader OSX";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B2D80FFA2259AB01005A86A5 /* Build configuration list for PBXProject "Log Reader OSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B2D810232259AB03005A86A5 /* Debug */,
+				B2D810242259AB03005A86A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B2D810252259AB03005A86A5 /* Build configuration list for PBXNativeTarget "Log Reader OSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B2D810262259AB03005A86A5 /* Debug */,
+				B2D810272259AB03005A86A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B2D810282259AB03005A86A5 /* Build configuration list for PBXNativeTarget "Log Reader OSXTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B2D810292259AB03005A86A5 /* Debug */,
+				B2D8102A2259AB03005A86A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B2D8102B2259AB03005A86A5 /* Build configuration list for PBXNativeTarget "Log Reader OSXUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B2D8102C2259AB03005A86A5 /* Debug */,
+				B2D8102D2259AB03005A86A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B2D80FF72259AB01005A86A5 /* Project object */;
+}
