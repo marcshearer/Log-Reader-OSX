@@ -306,4 +306,54 @@ class Utility {
             }
         }
     }
+    
+    // MARK: - Debug message ======================================================================== -
+    
+    class func debugMessage(_ from: String, _ message: String, showDevice: Bool = false, force: Bool = false, mainThread: Bool = true) {
+        
+        func closure() {
+            var outputMessage: String
+            let timestamp = Utility.dateString(Date(), format: "HH:mm:ss.SS", localized: false)
+            outputMessage = "DEBUG(\(from)): \(timestamp)"
+            outputMessage = outputMessage + " - \(message)"
+            print(outputMessage)
+            fflush(stdout)
+        }
+        
+        if mainThread {
+            Utility.mainThread(suppressDebug: true, execute: {
+                closure()
+            })
+        } else {
+            closure()
+        }
+    }
+    
+    // MARK: - Execute closure after delay ===================================================================== -
+    
+    class func mainThread(_ message: String = "Utility", suppressDebug: Bool = false, qos: DispatchQoS = .userInteractive, execute: @escaping ()->()) {
+        if false && !suppressDebug {
+            Utility.debugMessage(message, "About to execute closure on main thread", mainThread: false)
+        }
+        DispatchQueue.main.async(qos: qos, execute: execute)
+        if false && !suppressDebug {
+            Utility.debugMessage(message, "Main thread closure executed", mainThread: false)
+        }
+    }
+    
+    class func executeAfter(_ message: String="Utility", delay: Double, suppressDebug: Bool = false, qos: DispatchQoS = .userInteractive, completion: (()->())?) {
+        if false && !suppressDebug {
+            Utility.debugMessage(message, "Queing closure after \(delay)", mainThread: false)
+        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay, qos: qos, execute: {
+            if false && !suppressDebug {
+                Utility.debugMessage(message, "About to execute delayed closure", mainThread: false)
+            }
+            completion?()
+            if false && !suppressDebug {
+                Utility.debugMessage(message, "Delayed closure executed", mainThread: false)
+            }
+        })
+    }
+    
 }

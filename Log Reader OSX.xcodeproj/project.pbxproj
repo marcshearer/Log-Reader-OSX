@@ -7,13 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B2D810032259AB01005A86A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810022259AB01005A86A5 /* AppDelegate.swift */; };
-		B2D810052259AB01005A86A5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810042259AB01005A86A5 /* ViewController.swift */; };
-		B2D810072259AB02005A86A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2D810062259AB02005A86A5 /* Assets.xcassets */; };
+		B2D810052259AB01005A86A5 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810042259AB01005A86A5 /* LogViewController.swift */; };
 		B2D8100A2259AB02005A86A5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2D810082259AB02005A86A5 /* Main.storyboard */; };
 		B2D810162259AB03005A86A5 /* Log_Reader_OSXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810152259AB03005A86A5 /* Log_Reader_OSXTests.swift */; };
 		B2D810212259AB03005A86A5 /* Log_Reader_OSXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810202259AB03005A86A5 /* Log_Reader_OSXUITests.swift */; };
 		B2D8102F2259ACA3005A86A5 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D8102E2259ACA3005A86A5 /* Utility.swift */; };
+		B2D810312259AFA1005A86A5 /* Core Data Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810302259AFA1005A86A5 /* Core Data Class.swift */; };
+		B2D810332259B367005A86A5 /* Multipeer Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810322259B367005A86A5 /* Multipeer Class.swift */; };
+		B2D810352259B397005A86A5 /* Comms.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D810342259B397005A86A5 /* Comms.swift */; };
+		B2D810402259C989005A86A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D8103C2259C989005A86A5 /* AppDelegate.swift */; };
+		B2D810412259C989005A86A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2D8103D2259C989005A86A5 /* Assets.xcassets */; };
+		B2D810422259C989005A86A5 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B2D8103E2259C989005A86A5 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,12 +39,8 @@
 
 /* Begin PBXFileReference section */
 		B2D80FFF2259AB01005A86A5 /* Log Reader OSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Log Reader OSX.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B2D810022259AB01005A86A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B2D810042259AB01005A86A5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		B2D810062259AB02005A86A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B2D810042259AB01005A86A5 /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
 		B2D810092259AB02005A86A5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		B2D8100B2259AB02005A86A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B2D8100C2259AB02005A86A5 /* Log_Reader_OSX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Log_Reader_OSX.entitlements; sourceTree = "<group>"; };
 		B2D810112259AB03005A86A5 /* Log Reader OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Log Reader OSXTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2D810152259AB03005A86A5 /* Log_Reader_OSXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log_Reader_OSXTests.swift; sourceTree = "<group>"; };
 		B2D810172259AB03005A86A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -48,6 +48,14 @@
 		B2D810202259AB03005A86A5 /* Log_Reader_OSXUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log_Reader_OSXUITests.swift; sourceTree = "<group>"; };
 		B2D810222259AB03005A86A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B2D8102E2259ACA3005A86A5 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		B2D810302259AFA1005A86A5 /* Core Data Class.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Core Data Class.swift"; sourceTree = "<group>"; };
+		B2D810322259B367005A86A5 /* Multipeer Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Multipeer Class.swift"; sourceTree = "<group>"; };
+		B2D810342259B397005A86A5 /* Comms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comms.swift; sourceTree = "<group>"; };
+		B2D8103C2259C989005A86A5 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B2D8103D2259C989005A86A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B2D8103E2259C989005A86A5 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B2D8103F2259C989005A86A5 /* Log_Reader_OSX.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Log_Reader_OSX.entitlements; sourceTree = "<group>"; };
+		B2D810462259DEEF005A86A5 /* Log Reader OSX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Log Reader OSX.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,13 +106,10 @@
 		B2D810012259AB01005A86A5 /* Log Reader OSX */ = {
 			isa = PBXGroup;
 			children = (
-				B2D810022259AB01005A86A5 /* AppDelegate.swift */,
-				B2D810042259AB01005A86A5 /* ViewController.swift */,
-				B2D810062259AB02005A86A5 /* Assets.xcassets */,
-				B2D810082259AB02005A86A5 /* Main.storyboard */,
-				B2D8100B2259AB02005A86A5 /* Info.plist */,
-				B2D8100C2259AB02005A86A5 /* Log_Reader_OSX.entitlements */,
-				B2D8102E2259ACA3005A86A5 /* Utility.swift */,
+				B2D810462259DEEF005A86A5 /* Log Reader OSX.entitlements */,
+				B2D810432259C992005A86A5 /* Standard Components */,
+				B2D810382259B9FB005A86A5 /* View Controllers */,
+				B2D810362259B9B0005A86A5 /* Data & Utility Classes */,
 			);
 			path = "Log Reader OSX";
 			sourceTree = "<group>";
@@ -125,6 +130,61 @@
 				B2D810222259AB03005A86A5 /* Info.plist */,
 			);
 			path = "Log Reader OSXUITests";
+			sourceTree = "<group>";
+		};
+		B2D810362259B9B0005A86A5 /* Data & Utility Classes */ = {
+			isa = PBXGroup;
+			children = (
+				B2D8103A2259BA3F005A86A5 /* Utility Classes */,
+				B2D810392259BA20005A86A5 /* Comms Classes */,
+			);
+			name = "Data & Utility Classes";
+			sourceTree = "<group>";
+		};
+		B2D810382259B9FB005A86A5 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				B2D8103B2259BA6C005A86A5 /* Main form */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		B2D810392259BA20005A86A5 /* Comms Classes */ = {
+			isa = PBXGroup;
+			children = (
+				B2D810342259B397005A86A5 /* Comms.swift */,
+				B2D810322259B367005A86A5 /* Multipeer Class.swift */,
+			);
+			name = "Comms Classes";
+			sourceTree = "<group>";
+		};
+		B2D8103A2259BA3F005A86A5 /* Utility Classes */ = {
+			isa = PBXGroup;
+			children = (
+				B2D8102E2259ACA3005A86A5 /* Utility.swift */,
+				B2D810302259AFA1005A86A5 /* Core Data Class.swift */,
+			);
+			name = "Utility Classes";
+			sourceTree = "<group>";
+		};
+		B2D8103B2259BA6C005A86A5 /* Main form */ = {
+			isa = PBXGroup;
+			children = (
+				B2D810082259AB02005A86A5 /* Main.storyboard */,
+				B2D810042259AB01005A86A5 /* LogViewController.swift */,
+			);
+			name = "Main form";
+			sourceTree = "<group>";
+		};
+		B2D810432259C992005A86A5 /* Standard Components */ = {
+			isa = PBXGroup;
+			children = (
+				B2D8103C2259C989005A86A5 /* AppDelegate.swift */,
+				B2D8103D2259C989005A86A5 /* Assets.xcassets */,
+				B2D8103E2259C989005A86A5 /* Info.plist */,
+				B2D8103F2259C989005A86A5 /* Log_Reader_OSX.entitlements */,
+			);
+			name = "Standard Components";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,6 +255,11 @@
 				TargetAttributes = {
 					B2D80FFE2259AB01005A86A5 = {
 						CreatedOnToolsVersion = 10.2;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
 					};
 					B2D810102259AB03005A86A5 = {
 						CreatedOnToolsVersion = 10.2;
@@ -231,8 +296,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2D810072259AB02005A86A5 /* Assets.xcassets in Resources */,
+				B2D810412259C989005A86A5 /* Assets.xcassets in Resources */,
 				B2D8100A2259AB02005A86A5 /* Main.storyboard in Resources */,
+				B2D810422259C989005A86A5 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,8 +323,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2D810052259AB01005A86A5 /* ViewController.swift in Sources */,
-				B2D810032259AB01005A86A5 /* AppDelegate.swift in Sources */,
+				B2D810402259C989005A86A5 /* AppDelegate.swift in Sources */,
+				B2D810052259AB01005A86A5 /* LogViewController.swift in Sources */,
+				B2D810332259B367005A86A5 /* Multipeer Class.swift in Sources */,
+				B2D810312259AFA1005A86A5 /* Core Data Class.swift in Sources */,
+				B2D810352259B397005A86A5 /* Comms.swift in Sources */,
 				B2D8102F2259ACA3005A86A5 /* Utility.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,7 +494,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "Log Reader OSX/Log_Reader_OSX.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Log Reader OSX/Log Reader OSX.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 3T7CT2S464;
@@ -444,7 +513,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "Log Reader OSX/Log_Reader_OSX.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Log Reader OSX/Log Reader OSX.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 3T7CT2S464;
