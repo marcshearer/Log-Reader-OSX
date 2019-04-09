@@ -710,13 +710,13 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RG3-mn-9qa" userLabel="Device List Table View">
-                                <rect key="frame" x="0.0" y="0.0" width="200" height="559"/>
+                                <rect key="frame" x="0.0" y="0.0" width="200" height="477"/>
                                 <clipView key="contentView" id="Hh8-M9-J2y">
-                                    <rect key="frame" x="1" y="0.0" width="198" height="558"/>
+                                    <rect key="frame" x="1" y="0.0" width="198" height="476"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="OQs-Lw-A5p" id="qtO-Cr-hnN" userLabel="Device List Table View">
-                                            <rect key="frame" x="0.0" y="0.0" width="198" height="533"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="198" height="451"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -788,26 +788,69 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
+                            <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xbk-q5-H6a">
+                                <rect key="frame" x="8" y="529" width="184" height="22"/>
+                                <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="Filter text" usesSingleLineMode="YES" bezelStyle="round" id="DZQ-q7-DEF">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <connections>
+                                        <action selector="searchChanged:" target="DxM-WZ-Tqd" id="giZ-bg-UrV"/>
+                                    </connections>
+                                </searchFieldCell>
+                            </searchField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="W0W-i7-5f4">
+                                <rect key="frame" x="6" y="505" width="188" height="18"/>
+                                <buttonCell key="cell" type="check" title="Exclude logger messages" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="9mv-QN-vMb">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="excludeLoggerPressed:" target="DxM-WZ-Tqd" id="5rS-mz-c3Q"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="P4p-qK-qQl">
+                                <rect key="frame" x="6" y="483" width="188" height="18"/>
+                                <buttonCell key="cell" type="check" title="Scroll to latest" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="QgZ-tc-8an">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="scrollToLatestPressed:" target="DxM-WZ-Tqd" id="aEf-U5-PSD"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="zpH-hy-5ag" firstAttribute="top" secondItem="tsx-pi-Ibk" secondAttribute="top" id="5DO-g8-4lz"/>
-                            <constraint firstItem="RG3-mn-9qa" firstAttribute="top" secondItem="tsx-pi-Ibk" secondAttribute="top" id="9rM-Rs-PGA"/>
+                            <constraint firstItem="P4p-qK-qQl" firstAttribute="leading" secondItem="tsx-pi-Ibk" secondAttribute="leading" constant="8" id="6ny-i9-Fcb"/>
+                            <constraint firstItem="Xbk-q5-H6a" firstAttribute="top" secondItem="tsx-pi-Ibk" secondAttribute="top" constant="8" id="9hf-yM-j5L"/>
                             <constraint firstAttribute="bottom" secondItem="zpH-hy-5ag" secondAttribute="bottom" id="Ddp-KS-uz3"/>
+                            <constraint firstItem="P4p-qK-qQl" firstAttribute="top" secondItem="W0W-i7-5f4" secondAttribute="bottom" constant="8" id="EoE-kP-vzN"/>
+                            <constraint firstItem="Xbk-q5-H6a" firstAttribute="leading" secondItem="tsx-pi-Ibk" secondAttribute="leading" constant="8" id="Har-G5-p5M"/>
                             <constraint firstAttribute="bottom" secondItem="RG3-mn-9qa" secondAttribute="bottom" id="HiQ-RH-ZTP"/>
+                            <constraint firstItem="W0W-i7-5f4" firstAttribute="leading" secondItem="tsx-pi-Ibk" secondAttribute="leading" constant="8" id="Sph-fA-kIH"/>
                             <constraint firstItem="zpH-hy-5ag" firstAttribute="leading" secondItem="RG3-mn-9qa" secondAttribute="trailing" id="Uc7-Gc-BeC"/>
+                            <constraint firstItem="zpH-hy-5ag" firstAttribute="leading" secondItem="P4p-qK-qQl" secondAttribute="trailing" constant="8" id="Wur-QS-l67"/>
+                            <constraint firstItem="W0W-i7-5f4" firstAttribute="top" secondItem="Xbk-q5-H6a" secondAttribute="bottom" constant="8" id="YvM-fM-4J2"/>
+                            <constraint firstItem="zpH-hy-5ag" firstAttribute="leading" secondItem="Xbk-q5-H6a" secondAttribute="trailing" constant="8" id="a65-gA-yhF"/>
                             <constraint firstItem="zpH-hy-5ag" firstAttribute="leading" secondItem="tsx-pi-Ibk" secondAttribute="leading" constant="200" id="bAP-4x-W3L"/>
+                            <constraint firstItem="RG3-mn-9qa" firstAttribute="top" secondItem="P4p-qK-qQl" secondAttribute="bottom" constant="8" id="rkM-2M-hHZ"/>
                             <constraint firstItem="RG3-mn-9qa" firstAttribute="leading" secondItem="tsx-pi-Ibk" secondAttribute="leading" id="uf4-xw-KNm"/>
                             <constraint firstAttribute="trailing" secondItem="zpH-hy-5ag" secondAttribute="trailing" id="vLR-uq-RUk"/>
+                            <constraint firstItem="zpH-hy-5ag" firstAttribute="leading" secondItem="W0W-i7-5f4" secondAttribute="trailing" constant="8" id="zwd-WI-LBA"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="devicesTableView" destination="qtO-Cr-hnN" id="pu0-d4-f9o"/>
+                        <outlet property="excludeLoggerButton" destination="W0W-i7-5f4" id="q0U-z6-K6Y"/>
                         <outlet property="messagesTableView" destination="zM1-eh-sI6" id="ukU-Jr-GDX"/>
+                        <outlet property="scrollToLatestButton" destination="P4p-qK-qQl" id="tEs-xT-LNA"/>
+                        <outlet property="searchField" destination="DZQ-q7-DEF" id="4pS-0D-U74"/>
                     </connections>
                 </viewController>
                 <customObject id="ana-Kc-Jop" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="835"/>
+            <point key="canvasLocation" x="75" y="834.5"/>
         </scene>
     </scenes>
 </document>

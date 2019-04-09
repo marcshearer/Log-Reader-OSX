@@ -51,31 +51,7 @@ class MultipeerService: NSObject, CommsHandlerDelegate, MCSessionDelegate {
         self.connectionPurpose = purpose
         self.connectionType = type
         self.serviceID = serviceID!
-        
-        if false {
-            // Create my peer ID to be consistent over time - apparently helps stability!
-            var archivedPeerID = UserDefaults.standard.data(forKey: "MCPeerID")
-            if archivedPeerID == nil {
-                self.myPeerID = MCPeerID(displayName: Host.current().localizedName!)
-                do {
-                    try archivedPeerID = NSKeyedArchiver.archivedData(withRootObject: self.myPeerID, requiringSecureCoding: false)
-                } catch {
-                    archivedPeerID = nil
-                }
-                if archivedPeerID != nil {
-                    UserDefaults.standard.set(archivedPeerID, forKey: "MCPeerID")
-                    UserDefaults.standard.synchronize()
-                }
-            } else {
-                do {
-                    try self.myPeerID = NSKeyedUnarchiver.unarchivedObject(ofClass: MCPeerID.self, from: archivedPeerID!)!
-                } catch {
-                    self.myPeerID = MCPeerID(displayName: Host.current().localizedName!)
-                }
-            }
-        } else {
-            self.myPeerID = MCPeerID(displayName: Host.current().localizedName!)
-        }
+        self.myPeerID = MCPeerID(displayName: Host.current().localizedName!)
     }
     
     internal func startService(email: String!, recoveryMode: Bool, matchDeviceName: String! = nil) {

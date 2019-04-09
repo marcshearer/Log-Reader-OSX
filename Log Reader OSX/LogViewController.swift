@@ -12,18 +12,47 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
     
     private var multipeerHost: CommsServerHandlerDelegate?
     private var entries: [LogEntry] = []
+    private var unique: [String : LogEntry] = [:]
     private var devices: [String : Device] = [:]
     private var deviceFromRow: [Device] = []
     private var filteredEntries: [LogEntry] = []
     private var searchText = ""
+    private var matchDeviceName = ""
+    private var excludeLogger = true
+    private var scrollToLatest = true
     private var layout: [Layout]?
     private var total: [Int?]!
     private var totals = false
+    private let colors = [NSColor.black, NSColor.red, NSColor.blue, NSColor.green, NSColor.yellow, NSColor.orange, NSColor.gray]
 
     
     @IBOutlet private weak var devicesTableView: NSTableView!
     @IBOutlet private weak var messagesTableView: NSTableView!
+    @IBOutlet private weak var searchField: NSSearchFieldCell!
+    @IBOutlet private weak var excludeLoggerButton: NSButton!
+    @IBOutlet private weak var scrollToLatestButton: NSButton!
 
+    @IBAction func searchChanged(_ sender: NSSearchFieldCell) {
+        self.searchText = searchField.stringValue
+        self.resetSelection()
+    }
+    
+    @IBAction func excludeLoggerPressed(_ sender: NSButton) {
+        if self.excludeLogger != (self.excludeLoggerButton.state == .on) {
+            self.excludeLogger = (self.excludeLoggerButton.state == .on)
+            self.resetSelection()
+        }
+    }
+    
+    @IBAction func scrollToLatestPressed(_ sender: NSButton) {
+        if self.scrollToLatest != (self.scrollToLatestButton.state == .on) {
+            self.scrollToLatest = (self.scrollToLatestButton.state == .on)
+            if self.scrollToLatest {
+                self.messagesTableView.scrollRowToVisible(self.filteredEntries.count-1)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,6 +65,16 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
         
         self.setupLayout()
         self.setupGrid(displayTableView: messagesTableView, layout: self.layout!)
+        
+        // Pre-fill "all" device
+        _ = self.addDevice("", color: NSColor.darkGray)
+        
+        // Switch off focus on devices and set focus to search
+        devicesTableView.focusRingType = .none
+        devicesTableView.refusesFirstResponder = true
+        messagesTableView.refusesFirstResponder = true
+        searchField.refusesFirstResponder = false
+        searchField.placeholderString = "Filter text"
     }
 
     override var representedObject: Any? {
@@ -63,6 +102,8 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
         switch tableView.tag {
         case 1:
             // Device list
+            self.matchDeviceName = self.deviceFromRow[row].deviceName
+            self.resetSelection()
             return true
         case 2:
             // Message list
@@ -75,28 +116,33 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
     internal func tableView(_ tableView: NSTableView, shouldEdit tableColumn: NSTableColumn?, row: Int) -> Bool {
         return false
     }
-    
+        
     internal func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-        var cell: NSCell!
+        var cell: NSTextFieldCell?
         
         switch tableView.tag {
         case 1:
             // Device list
-            cell=NSCell(textCell: deviceFromRow[row].deviceName)
+            let deviceName = deviceFromRow[row].deviceName
+            cell = NSTextFieldCell(textCell: (deviceName == "" ? "All devices" : deviceName))
+            cell?.textColor = deviceFromRow[row].color
         case 2:
             // Message list
             if let identifier = tableColumn?.identifier.rawValue {
                 if let column = Int(identifier) {
-                    switch column {
-                    case 0:
-                        cell=NSCell(textCell: self.entries[row].deviceName ?? "")
-                    case 1:
-                        cell=NSCell(textCell: self.entries[row].timestamp ?? "")
-                    case 2:
-                        cell=NSCell(textCell: self.entries[row].message ?? "")
+                    switch self.layout![column].key {
+                    case "device":
+                        cell = NSTextFieldCell(textCell: self.filteredEntries[row].deviceName ?? "")
+                    case "timestamp":
+                        cell = NSTextFieldCell(textCell: self.filteredEntries[row].timestamp ?? "")
+                    case "source":
+                        cell = NSTextFieldCell(textCell: self.filteredEntries[row].source ?? "")
+                    case "message":
+                        cell = NSTextFieldCell(textCell: self.filteredEntries[row].message ?? "")
                     default:
                         break
                     }
+                    cell?.textColor = devices[self.filteredEntries[row].deviceName!]!.color
                 }
             }
         default:
@@ -104,9 +150,32 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
         }
         return cell
     }
-
+    
     // MARK: - Utility Methods ======================================================================== -
 
+    private func addDevice(_ deviceName: String, color: NSColor) -> Device {
+        let device = Device(deviceName: deviceName, row: self.deviceFromRow.count, color: color)
+        self.deviceFromRow.append(device)
+        self.devices[deviceName] = device
+        
+        return device
+    }
+    
+    private func resetSelection() {
+        self.messagesTableView.beginUpdates()
+        if self.filteredEntries.count > 0 {
+            self.messagesTableView.removeRows(at: IndexSet(integersIn: 0...self.filteredEntries.count-1))
+            self.filteredEntries = []
+        }
+        for entry in self.entries {
+            if match(entry: entry) {
+                self.filteredEntries.append(entry)
+            }
+        }
+        self.messagesTableView.reloadData()
+        self.messagesTableView.endUpdates()
+    }
+    
     private func setupGrid(displayTableView: NSTableView, layout: [Layout]) {
         // Remove any existing columns
         for tableColumn in displayTableView.tableColumns {
@@ -144,33 +213,64 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
     private func setupLayout() {
         
         self.layout =
-            [ Layout(key: "device",               title: "Device",        width: 140,      alignment: .left,   type: .string,      total: false),
-              Layout(key: "timestamp",            title: "Time",          width: 80,      alignment: .center, type: .string,      total: false),
-              Layout(key: "message",              title: "Message",       width: -1000,    alignment: .left,   type: .string,      total: false) ]
+            [ Layout(key: "device",     title: "Device",    width: 140,     alignment: .left,   type: .string,  total: false),
+              Layout(key: "timestamp",  title: "Time",      width: 80,      alignment: .center, type: .string,  total: false),
+              Layout(key: "source",     title: "Source",    width: 80,      alignment: .center, type: .string,  total: false),
+              Layout(key: "message",    title: "Message",   width: -1000,   alignment: .left,   type: .string,  total: false) ]
     }
     
     private func match(entry: LogEntry) -> Bool {
-        if self.searchText == "" {
-            return true
+        var matched = true
+        
+        if self.excludeLogger && entry.source == "logger" {
+            matched = false
+            
         } else {
-            var combined: String
-            if let deviceName = entry.deviceName {
-                combined = deviceName + " " + (entry.message ?? "")
-            } else {
-                combined = entry.message ?? ""
+            
+            if self.searchText != "" {
+                matched = matched &&
+                    ((entry.message?.lowercased() ?? "").contains(self.searchText.lowercased()) ||
+                     (entry.source?.lowercased() ?? "").contains(self.searchText.lowercased()))
             }
-            return (combined.lowercased().contains(searchText.lowercased()))
+            if self.matchDeviceName != "" {
+                matched = matched && (entry.deviceName == self.matchDeviceName)
+            }
         }
+        
+        return matched
     }
     
     // MARK: - Comms Delegates ======================================================================== -
     
     internal func stateChange(for peer: CommsPeer, reason: String?) {
+        
+        Utility.mainThread {
+            
+            // Send last UUID and sequence to trigger history refresh
+            if peer.state == .connected {
+                // Add to device table if necessary
+                var device = self.devices[peer.deviceName]
+                var lastUUID = ""
+                var lastSequence = 0
+                if device == nil {
+                    device = self.addDevice(peer.deviceName, color: self.colors[min(self.deviceFromRow.count-1, self.colors.count-1)])
+                    self.devicesTableView.reloadData()
+                } else {
+                    lastUUID = device!.lastUUID ?? ""
+                    lastSequence = device!.lastSequence ?? 0
+                }
+                // Send last log UUID and sequence to trigger refresh
+                let data : [String : Any] = [ "uuid"      : lastUUID,
+                                              "sequence"  : lastSequence ]
+                self.multipeerHost?.send("lastSequence", data, to: peer)
+            }
+        }
     }
     
     internal func didReceiveData(descriptor: String, data: [String : Any?]?, from peer: CommsPeer) {
         
         Utility.mainThread {
+            
             let deviceName = peer.deviceName
             
             if self.entries.count >= 10000 {
@@ -187,28 +287,49 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
                 self.entries.remove(at: 0)
             }
             
-            let timestamp = data?["timestamp"] as! String?
-            let message = data?["message"] as! String?
-            
-            // Add to total list
-            let entry = LogEntry(deviceName: deviceName, timestamp: timestamp, message: message)
-            self.entries.append(entry)
-            
-            if self.match(entry: entry) {
-                // Gets past filter - add to the currently displayed list
-                self.messagesTableView.beginUpdates()
-                self.filteredEntries.append(entry)
-                self.messagesTableView.insertRows(at: IndexSet(integer: self.filteredEntries.count-1))
-                self.messagesTableView.endUpdates()
-                self.messagesTableView.scrollRowToVisible(self.filteredEntries.count-1)
-            }
-            
-            // Check if already in device list
-            if self.devices[deviceName] == nil {
-                let device = Device(deviceName: deviceName, row: self.deviceFromRow.count)
-                self.deviceFromRow.append(device)
-                self.devices[deviceName] = device
-                self.devicesTableView.reloadData()
+            for (sequence, dictionary) in data as! [String : [String : Any]] {
+                if let logUUID = dictionary["uuid"] as! String?,
+                   let timestamp = dictionary["timestamp"] as! String?,
+                   let source = dictionary["source"] as! String?,
+                   let message = dictionary["message"] as! String? {
+                    
+                    let uniqueKey = "\(deviceName)-\(logUUID)-\(sequence)"
+                    
+                    if self.unique[uniqueKey] == nil {
+                        
+                        // Not in list - Add it
+                        let entry = LogEntry(deviceName: deviceName, timestamp: timestamp, source: source, message: message)
+                        var index = self.entries.firstIndex(where: {$0.timestamp! > timestamp})
+                        if index == nil {
+                            index = self.entries.count
+                        }
+                        self.entries.insert(entry, at: index!)
+                        self.unique[uniqueKey] = entry
+                        
+                        // Check if device name already in device list
+                        if let device = self.devices[deviceName] {
+                            // Save last UUID and sequence
+                            device.lastUUID = logUUID
+                            device.lastSequence = Int(sequence)
+                        }
+                        
+                        // Check if in filtered list
+                        if self.match(entry: entry) {
+                            // Gets past filter - add to the currently displayed list
+                            self.messagesTableView.beginUpdates()
+                            var index = self.filteredEntries.firstIndex(where: {$0.timestamp! > timestamp})
+                            if index == nil {
+                                index = self.filteredEntries.count
+                            }
+                            self.filteredEntries.insert(entry, at: index!)
+                            self.messagesTableView.insertRows(at: IndexSet(integer: index!))
+                            self.messagesTableView.endUpdates()
+                            if self.scrollToLatest {
+                                self.messagesTableView.scrollRowToVisible(self.filteredEntries.count-1)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -223,11 +344,13 @@ fileprivate class LogEntry {
     public var deviceName: String?
     public var timestamp: String?
     public var message: String?
+    public var source: String?
     public var expanded = false
     
-    init(deviceName: String?, timestamp: String?, message:String?) {
+    init(deviceName: String?, timestamp: String?, source: String?, message:String?) {
         self.deviceName = deviceName
         self.timestamp = timestamp
+        self.source = source
         self.message = message
     }
 }
@@ -236,10 +359,13 @@ fileprivate class Device {
     public var deviceName: String
     public var color: NSColor?
     public var row: Int
+    public var lastUUID: String?
+    public var lastSequence: Int?
 
-    init(deviceName: String, row: Int) {
+    init(deviceName: String, row: Int, color: NSColor) {
         self.deviceName = deviceName
         self.row = row
+        self.color = color
     }
 }
 
