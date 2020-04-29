@@ -233,6 +233,12 @@ class MultipeerService: NSObject, CommsHandlerDelegate, MCSessionDelegate {
         // Not implemented
     }
     
+    internal func session(_ session: MCSession, didReceiveCertificate certificate: [Any]?, fromPeer peerID: MCPeerID, certificateHandler: @escaping (Bool) -> Void) {
+        Utility.mainThread {
+            certificateHandler(true)
+        }
+    }
+    
     // MARK: - Utility Methods ========================================================================= -
     
     private func commsConnectionState(_ state: MCSessionState) -> CommsConnectionState {

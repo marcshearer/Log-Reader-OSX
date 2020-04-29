@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  LogViewController.swift
 //  Log Reader OSX
 //
 //  Created by Marc Shearer on 07/04/2019.
@@ -24,13 +24,37 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
     private var total: [Int?]!
     private var totals = false
     private let colors = [NSColor.black, NSColor.red, NSColor.blue, NSColor.green, NSColor.yellow, NSColor.orange, NSColor.gray]
-
+    private var fileOpen = false
+    private var lastDirectory: URL?
+    
+    private var menuItem: [String:NSMenuItem?] = [:]
+    private var recentMenuItem: [NSMenuItem?] = []
+    
+    private var recentFileUrls: [String?] = []
     
     @IBOutlet private weak var devicesTableView: NSTableView!
     @IBOutlet private weak var messagesTableView: NSTableView!
     @IBOutlet private weak var searchField: NSSearchFieldCell!
     @IBOutlet private weak var excludeLoggerButton: NSButton!
     @IBOutlet private weak var scrollToLatestButton: NSButton!
+    
+    @IBAction func openMenuSelected(_ sender: Any) {
+        self.openLogfile()
+    }
+    
+    @IBAction func openRecentMenuSelected(_ menuItem :NSMenuItem) {
+        if let fileUrl = self.recentFileUrls[menuItem.tag - 1] {
+            self.openSpecificLogFile(fileUrl: fileUrl)
+        }
+    }
+
+    @IBAction func closeMenuSelected(_ sender: Any) {
+        self.closeLogFile()
+    }
+    
+    @IBAction func saveAsMenuSelected(_ sender: Any) {
+        self.saveAsLogFile()
+    }
 
     @IBAction func searchChanged(_ sender: NSSearchFieldCell) {
         self.searchText = searchField.stringValue
@@ -56,25 +80,32 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.resetAll()
+        
         // Start listener service
         multipeerHost = MultipeerServerService(purpose: .playing, serviceID: "whist-logger")
         self.multipeerHost?.stateDelegate = self as CommsStateDelegate?
         self.multipeerHost?.dataDelegate = self as CommsDataDelegate?
         self.multipeerHost?.connectionDelegate = self as CommsConnectionDelegate?
-        multipeerHost?.start()
+        self.multipeerHost?.start()
         
         self.setupLayout()
         self.setupGrid(displayTableView: messagesTableView, layout: self.layout!)
-        
-        // Pre-fill "all" device
-        _ = self.addDevice("", color: NSColor.darkGray)
-        
+                
         // Switch off focus on devices and set focus to search
         devicesTableView.focusRingType = .none
         devicesTableView.refusesFirstResponder = true
         messagesTableView.refusesFirstResponder = true
         searchField.refusesFirstResponder = false
         searchField.placeholderString = "Filter text"
+        
+        //Setup menus
+        self.setupMenus()
+        self.loadRecentList()
+        self.enableMenus()
+        
+        // Get last load/save directory
+        self.loadLastDirectory()
     }
 
     override var representedObject: Any? {
@@ -138,7 +169,7 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
                     case "source":
                         cell = NSTextFieldCell(textCell: self.filteredEntries[row].source ?? "")
                     case "message":
-                        cell = NSTextFieldCell(textCell: self.filteredEntries[row].message ?? "")
+                        cell = NSTextFieldCell(textCell: self.filteredEntries[row].message?.replacingOccurrences(of: "\n", with: " ") ?? "")
                     default:
                         break
                     }
@@ -151,12 +182,287 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
         return cell
     }
     
+    internal func tableView(_ tableView: NSTableView, shouldShowCellExpansionFor tableColumn: NSTableColumn?, row: Int) -> Bool {
+        return true
+    }
+    
+    internal func tableView(_ tableView: NSTableView, toolTipFor cell: NSCell, rect: NSRectPointer, tableColumn: NSTableColumn?, row: Int,  mouseLocation: NSPoint) -> String {
+        var result = ""
+        var line = ""
+        var level = 0
+        var spaceSkipping = false
+        var lines = 0
+        var inArray = 0
+        var lastClosing = false
+        let indent = 1
+        let pad = "\t"
+        var skipping = 0
+                
+        if let message = self.filteredEntries[row].message?.replacingOccurrences(of: "\n", with: " ") {
+            
+            for char in message {
+                
+                if skipping > 0 {
+                    skipping -= 1
+                } else {
+                    
+                    switch char {
+                    case "(", ",":
+                        line += String(char)
+                        if (inArray == 0 || !lastClosing) || char != "," {
+                            level += (char == "(" ? 1 : 0)
+                            result += line + "\n" + String(repeating: pad, count: indent * level)
+                            line = ""
+                            lines += 1
+                            lastClosing = false
+                        }
+                        spaceSkipping = true
+                    case ")":
+                        level -= 1
+                        line += "\n" + String(repeating: pad, count: indent * level) + String(char)
+                        lastClosing = true
+                        lines += 1
+                        spaceSkipping = false
+                    case "[":
+                        if line.replacingOccurrences(of: " ", with: "") == "matchSessionUUIDs=" {
+                            // Special case - skip most of UUID
+                            skipping = 32
+                        }
+                        line += String(char)
+                        inArray -= 1
+                        lastClosing = true
+                        spaceSkipping = false
+                    case "]":
+                        line += String(char)
+                        inArray += 1
+                        lastClosing = true
+                        spaceSkipping = false
+                    case " ":
+                        if !spaceSkipping {
+                            line += String(char)
+                        }
+                    default:
+                        line += String(char)
+                        lastClosing = true
+                        spaceSkipping = false
+                    }
+                }
+            }
+            result += line
+        }
+        
+        return result
+    }
+    
+    
+    // MARK: - Menu Option Setup ======================================================================== -
+
+    private func setupMenus() {
+        let mainMenu = NSApplication.shared.mainMenu!
+        let subMenu = mainMenu.item(withTag: 1)?.submenu
+
+        self.menuItem["open"] = subMenu?.item(withTag: 1)
+        self.menuItem["openRecent"] = subMenu?.item(withTag: 2)
+        self.menuItem["close"] = subMenu?.item(withTag: 3)
+        self.menuItem["saveAs"] = subMenu?.item(withTag: 4)
+        
+        for index in 0...3 {
+            self.recentMenuItem.append(self.menuItem["openRecent"]??.submenu?.item(withTag: index + 1))
+        }
+        self.menuItem["openRecent"]??.isEnabled = true
+        
+        subMenu?.item(withTitle: "Cut")?.isEnabled = false
+    }
+    
+    private func enableMenus() {
+        self.menuItem["close"]??.isEnabled = self.fileOpen
+        self.menuItem["saveAs"]??.isEnabled = !self.entries.isEmpty
+        self.menuItem["openRecent"]??.isEnabled = !self.recentFileUrls.isEmpty
+    }
+    
+    private func loadRecentList() {
+        // Load from user defaults
+        self.recentFileUrls = []
+        for index in 0...3 {
+            self.recentFileUrls.append(UserDefaults.standard.string(forKey: "recent\(index+1)"))
+        }
+            
+        // Remove any blanks
+        for index in (0...3).reversed() {
+            if self.recentFileUrls[index] == "" {
+                self.recentFileUrls.remove(at: index)
+            }
+        }
+        self.updateRecentMenu()
+    }
+    
+    private func insertRecentList(fileUrl: String) {
+        // First remove if already there
+        if let index = self.recentFileUrls.firstIndex(where: {$0 == fileUrl}) {
+            self.recentFileUrls.remove(at: index)
+        }
+                
+        // Insert at top
+        self.recentFileUrls.insert(fileUrl, at: 0)
+        
+        // Remove last entry if too many
+        if self.recentFileUrls.count > 4 {
+            self.recentFileUrls.remove(at: 4)
+        }
+        
+        // Save to user defaults
+        for index in 0...3 {
+            UserDefaults.standard.set(self.recentFileUrls[index], forKey: "recent\(index+1)")
+        }
+        
+        // Update menu
+        self.updateRecentMenu()
+    }
+
+    private func updateRecentMenu() {
+        for index in 0...3 {
+            if self.recentFileUrls[index] ?? "" == "" {
+                self.recentMenuItem[index]?.isHidden = true
+            } else {
+                self.recentMenuItem[index]?.title = ((self.recentFileUrls[index]! as NSString).deletingPathExtension as NSString).lastPathComponent
+                self.recentMenuItem[index]?.isHidden = false
+            }
+        }
+    }
+        
+    // MARK: - Last directory load/save =================================================================== -
+    
+    func loadLastDirectory() {
+        if let defaultsLastDirectory = UserDefaults.standard.string(forKey: "lastDirectory") {
+            if let lastDirectory = URL(string: defaultsLastDirectory) {
+                self.lastDirectory = lastDirectory
+            }
+        }
+    }
+    
+    func saveLastDirectory(_ lastFilename: URL) {
+        self.lastDirectory = lastFilename.deletingLastPathComponent()
+        UserDefaults.standard.set(self.lastDirectory!.absoluteString, forKey: "lastDirectory")
+    }
+    
+    // MARK: - Menu Option Methods ======================================================================== -
+
+    private func openLogfile() {
+        
+        self.chooseOpenFileUrl() { (fileUrl) in
+            self.openSpecificLogFile(fileUrl: fileUrl.absoluteString)
+        }
+    }
+    
+    private func openSpecificLogFile(fileUrl: String) {
+        let entryState = multipeerHost?.handlerState
+        
+        do {
+            if let fileUrl = URL(string: fileUrl) {
+                let json = try String(contentsOf: fileUrl, encoding: .utf8)
+                if let logList = self.decode(json: json) {
+                    var sequence = 0
+                    
+                    // Stop receiving logs
+                    self.multipeerHost?.stop()
+                    
+                    // Clear current logs
+                    self.resetAll()
+                    
+                    // Insert entries from file
+                    for logEntry in logList {
+                        if let deviceName = logEntry["deviceName"] {
+                            if self.devices[deviceName] == nil {
+                                _ = self.addDevice(deviceName)
+                            }
+                            self.processData(dictionary: logEntry, sequence:sequence, deviceName: deviceName, update: false)
+                            sequence += 1
+                        }
+                    }
+                    
+                    // Show in table
+                    self.resetSelection()
+                    
+                    // Flag opening
+                    self.fileOpen = true
+                    
+                    // Update menus
+                    self.enableMenus()
+                    self.insertRecentList(fileUrl: fileUrl.absoluteString)
+                    
+                } else {
+                    self.error(entryState: entryState)
+                }
+            }
+        } catch {
+            print(error.localizedDescription)
+            self.error(entryState: entryState)
+        }
+    }
+    
+    private func error(entryState: CommsHandlerState?) {
+        Utility.alertMessage("Error opening file")
+        if entryState != .notStarted {
+            self.multipeerHost?.start()
+        }
+    }
+    
+    private func closeLogFile() {
+        self.resetAll()
+        self.resetSelection()
+        self.multipeerHost?.stop()
+        self.multipeerHost?.start()
+        
+        // Flag closing
+        self.fileOpen = false
+        
+        // Enable menus
+        self.enableMenus()
+    }
+    
+    private func saveAsLogFile() {
+        self.chooseSaveFileUrl() { (fileUrl) in
+            if let data = self.serialise() {
+                do {
+                    try data.write(to: fileUrl, atomically: true, encoding: String.Encoding.utf8)
+                    self.insertRecentList(fileUrl: fileUrl.absoluteString)
+                } catch {
+                    Utility.alertMessage("Error writing new file")
+                }
+            } else {
+                Utility.alertMessage("Error writing new file")
+            }
+        }
+    }
+    
     // MARK: - Utility Methods ======================================================================== -
 
-    private func addDevice(_ deviceName: String, color: NSColor) -> Device {
+    private func resetAll() {
+        
+        self.messagesTableView.beginUpdates()
+        self.filteredEntries = []
+        self.messagesTableView.endUpdates()
+        self.devicesTableView.beginUpdates()
+        self.entries = []
+        self.unique = [:]
+        self.devices = [:]
+        self.deviceFromRow = []
+        self.searchText = ""
+        self.matchDeviceName = ""
+        self.devicesTableView.endUpdates()
+        
+        // Pre-fill "all" device
+        _ = self.addDevice("", color: NSColor.darkGray)
+        self.devicesTableView.reloadData()
+
+    }
+    
+    private func addDevice(_ deviceName: String, color: NSColor? = nil) -> Device {
+        let color = color ?? self.colors[min(self.deviceFromRow.count-1, self.colors.count-1)]
         let device = Device(deviceName: deviceName, row: self.deviceFromRow.count, color: color)
         self.deviceFromRow.append(device)
         self.devices[deviceName] = device
+        self.devicesTableView.reloadData()
         
         return device
     }
@@ -216,7 +522,7 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
             [ Layout(key: "device",     title: "Device",    width: 140,     alignment: .left,   type: .string,  total: false),
               Layout(key: "timestamp",  title: "Time",      width: 80,      alignment: .center, type: .string,  total: false),
               Layout(key: "source",     title: "Source",    width: 80,      alignment: .center, type: .string,  total: false),
-              Layout(key: "message",    title: "Message",   width: -1000,   alignment: .left,   type: .string,  total: false) ]
+              Layout(key: "message",    title: "Message",   width: -3000,   alignment: .left,   type: .string,  total: false) ]
     }
     
     private func match(entry: LogEntry) -> Bool {
@@ -253,7 +559,7 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
                 var lastUUID = ""
                 var lastSequence = 0
                 if device == nil {
-                    device = self.addDevice(peer.deviceName, color: self.colors[min(self.deviceFromRow.count-1, self.colors.count-1)])
+                    device = self.addDevice(peer.deviceName)
                     self.devicesTableView.reloadData()
                 } else {
                     lastUUID = device!.lastUUID ?? ""
@@ -263,6 +569,7 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
                 let data : [String : Any] = [ "uuid"      : lastUUID,
                                               "sequence"  : lastSequence ]
                 self.multipeerHost?.send("lastSequence", data, to: peer)
+                print( lastSequence)
             }
         }
     }
@@ -288,66 +595,154 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
             }
             
             for (sequence, dictionary) in data as! [String : [String : Any]] {
-                if let logUUID = dictionary["uuid"] as! String?,
-                   let timestamp = dictionary["timestamp"] as! String?,
-                   let source = dictionary["source"] as! String?,
-                   let message = dictionary["message"] as! String? {
-                    
-                    let uniqueKey = "\(deviceName)-\(logUUID)-\(sequence)"
-                    
-                    if self.unique[uniqueKey] == nil {
-                        
-                        // Not in list - Add it
-                        let entry = LogEntry(deviceName: deviceName, timestamp: timestamp, source: source, message: message)
-                        var index = self.entries.firstIndex(where: {$0.timestamp! > timestamp})
-                        if index == nil {
-                            index = self.entries.count
-                        }
-                        self.entries.insert(entry, at: index!)
-                        self.unique[uniqueKey] = entry
-                        
-                        // Check if device name already in device list
-                        if let device = self.devices[deviceName] {
-                            // Save last UUID and sequence
-                            device.lastUUID = logUUID
-                            device.lastSequence = Int(sequence)
-                        }
-                        
-                        // Check if in filtered list
-                        if self.match(entry: entry) {
-                            // Gets past filter - add to the currently displayed list
-                            self.messagesTableView.beginUpdates()
-                            var index = self.filteredEntries.firstIndex(where: {$0.timestamp! > timestamp})
-                            if index == nil {
-                                index = self.filteredEntries.count
-                            }
-                            self.filteredEntries.insert(entry, at: index!)
-                            self.messagesTableView.insertRows(at: IndexSet(integer: index!))
-                            self.messagesTableView.endUpdates()
-                            if self.scrollToLatest {
-                                self.messagesTableView.scrollRowToVisible(self.filteredEntries.count-1)
-                            }
-                        }
+                self.processData(dictionary: dictionary, sequence: Int(sequence) ?? 0, deviceName: deviceName)
+            }
+        }
+    }
+    
+    private func processData(dictionary: [String : Any], sequence: Int, deviceName: String, update: Bool = true) {
+        if let logUUID = dictionary["uuid"] as! String?,
+            let timestamp = dictionary["timestamp"] as! String?,
+            let source = dictionary["source"] as! String?,
+            let message = dictionary["message"]  as! String? {
+            
+            let uniqueKey = "\(deviceName)-\(logUUID)-\(sequence)"
+            
+            if self.unique[uniqueKey] == nil {
+                
+                // Not in list - Add it
+                let entry = LogEntry(uuid: logUUID, deviceName: deviceName, timestamp: timestamp, source: source, message: message)
+                var index = self.entries.firstIndex(where: {$0.timestamp! > timestamp})
+                if index == nil {
+                    index = self.entries.count
+                }
+                self.entries.insert(entry, at: index!)
+                self.unique[uniqueKey] = entry
+                
+                // Check if device name already in device list
+                if let device = self.devices[deviceName] {
+                    // Save last UUID and sequence
+                    device.lastUUID = logUUID
+                    device.lastSequence = Int(sequence)
+                }
+                
+                // Check if in filtered list
+                if update && self.match(entry: entry) {
+                    // Gets past filter - add to the currently displayed list
+                    self.messagesTableView.beginUpdates()
+                    var index = self.filteredEntries.firstIndex(where: {$0.timestamp! > timestamp})
+                    if index == nil {
+                        index = self.filteredEntries.count
+                    }
+                    self.filteredEntries.insert(entry, at: index!)
+                    self.messagesTableView.insertRows(at: IndexSet(integer: index!))
+                    self.messagesTableView.endUpdates()
+                    if self.scrollToLatest {
+                        self.messagesTableView.scrollRowToVisible(self.filteredEntries.count-1)
                     }
                 }
             }
         }
     }
-    
+
     func connectionReceived(from peer: CommsPeer, info: [String : Any?]?) -> Bool {
         return true
     }
     
+    private func serialise() -> String? {
+        var propertyList: [[String : Any]] = []
+        var json: String?
+        
+        for entry in self.entries {
+            if entry.source != "logger" {
+                propertyList.append([ "uuid"       : entry.uuid        ,
+                                      "deviceName" : entry.deviceName! ,
+                                      "timestamp"  : entry.timestamp!  ,
+                                      "source"     : entry.source!     ,
+                                      "message"    : entry.message!    ])
+            }
+        }
+        
+        do {
+            let data = try JSONSerialization.data(withJSONObject: propertyList, options: .prettyPrinted)
+            json = String(data: data, encoding: .utf8)
+        } catch {
+            // Just return nil
+        }
+        
+        return json
+    }
+    
+    private func decode(json: String) -> [[String : String]]? {
+        var dictionary: [[String : String]]?
+        
+        if let data = json.data(using: .utf8) {
+            do {
+                dictionary = try JSONSerialization.jsonObject(with: data, options: []) as? [[String : String]]
+            } catch {
+            }
+        }
+        
+        return dictionary
+    }
+    
+    private func chooseSaveFileUrl(completion: @escaping (URL)->()) {
+        
+        let savePanel = NSSavePanel()
+        if let lastDirectory = self.lastDirectory {
+            savePanel.directoryURL = lastDirectory
+        } else {
+            savePanel.directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        }
+        savePanel.canCreateDirectories = true
+        savePanel.title = "Save log file"
+        savePanel.message = "Enter the name of the file to save"
+        savePanel.prompt = "Save"
+        savePanel.level = .floating
+        savePanel.allowedFileTypes = [ "logx" ]
+        savePanel.allowsOtherFileTypes = false
+        savePanel.begin { result in
+            if result == .OK {
+                completion(savePanel.url!)
+                self.saveLastDirectory(savePanel.url!)
+            }
+        }
+    }
+    
+    private func chooseOpenFileUrl(completion: @escaping (URL)->()) {
+        
+        let openPanel = NSOpenPanel()
+        if let lastDirectory = self.lastDirectory {
+            openPanel.directoryURL = lastDirectory
+        } else {
+            openPanel.directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        }
+        openPanel.allowsMultipleSelection = false
+        openPanel.canChooseDirectories = false
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = true
+        openPanel.allowedFileTypes = [ "logx" ]
+        openPanel.allowsOtherFileTypes = false
+        openPanel.prompt = "Open"
+        openPanel.level = .floating
+        openPanel.begin { result in
+            if result == .OK {
+                completion(openPanel.urls[0])
+                self.saveLastDirectory(openPanel.urls[0])
+            }
+        }
+    }
 }
 
 fileprivate class LogEntry {
+    public var uuid: String
     public var deviceName: String?
     public var timestamp: String?
     public var message: String?
     public var source: String?
-    public var expanded = false
     
-    init(deviceName: String?, timestamp: String?, source: String?, message:String?) {
+    init(uuid: String, deviceName: String?, timestamp: String?, source: String?, message:String?) {
+        self.uuid = uuid
         self.deviceName = deviceName
         self.timestamp = timestamp
         self.source = source
