@@ -52,6 +52,10 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
         self.closeLogFile()
     }
     
+    @IBAction func clearMenuSelected(_ sender: Any) {
+        self.clearLogFile()
+    }
+    
     @IBAction func saveAsMenuSelected(_ sender: Any) {
         self.saveAsLogFile()
     }
@@ -190,10 +194,12 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
         var result = ""
         var line = ""
         var level = 0
-        var spaceSkipping = false
         var lines = 0
         var inArray = 0
         var lastClosing = false
+        var spaceSkipping = false
+        var matchSession = false
+        var matchSessionStart = false
         let indent = 1
         let pad = "\t"
         var skipping = 0
@@ -210,23 +216,31 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
                     case "(", ",":
                         line += String(char)
                         if (inArray == 0 || !lastClosing) || char != "," {
-                            level += (char == "(" ? 1 : 0)
-                            result += line + "\n" + String(repeating: pad, count: indent * level)
+                            if char == "(" {
+                                level += 1
+                                result += line + String(repeating: pad, count: indent - 1)
+                            } else {
+                                result += line + "\n" + String(repeating: pad, count: indent * level)
+                            }
                             line = ""
                             lines += 1
                             lastClosing = false
                         }
+                        if char == "," && matchSession {
+                            matchSessionStart = true
+                        }
                         spaceSkipping = true
                     case ")":
                         level -= 1
-                        line += "\n" + String(repeating: pad, count: indent * level) + String(char)
+                        line += String(char)
                         lastClosing = true
                         lines += 1
                         spaceSkipping = false
                     case "[":
                         if line.replacingOccurrences(of: " ", with: "") == "matchSessionUUIDs=" {
                             // Special case - skip most of UUID
-                            skipping = 32
+                            matchSession = true
+                            matchSessionStart = true
                         }
                         line += String(char)
                         inArray -= 1
@@ -237,12 +251,19 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
                         inArray += 1
                         lastClosing = true
                         spaceSkipping = false
+                        matchSession = false
                     case " ":
                         if !spaceSkipping {
                             line += String(char)
                         }
                     default:
-                        line += String(char)
+                        if matchSession && matchSessionStart {
+                            // Looks like we're into a second session UUID - skip most of it
+                            matchSessionStart = false
+                            skipping = 31
+                        } else {
+                            line += String(char)
+                        }
                         lastClosing = true
                         spaceSkipping = false
                     }
@@ -264,7 +285,8 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
         self.menuItem["open"] = subMenu?.item(withTag: 1)
         self.menuItem["openRecent"] = subMenu?.item(withTag: 2)
         self.menuItem["close"] = subMenu?.item(withTag: 3)
-        self.menuItem["saveAs"] = subMenu?.item(withTag: 4)
+        self.menuItem["clear"] = subMenu?.item(withTag: 4)
+        self.menuItem["saveAs"] = subMenu?.item(withTag: 5)
         
         for index in 0...3 {
             self.recentMenuItem.append(self.menuItem["openRecent"]??.submenu?.item(withTag: index + 1))
@@ -276,6 +298,7 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
     
     private func enableMenus() {
         self.menuItem["close"]??.isEnabled = self.fileOpen
+        self.menuItem["clear"]??.isEnabled = !self.fileOpen
         self.menuItem["saveAs"]??.isEnabled = !self.entries.isEmpty
         self.menuItem["openRecent"]??.isEnabled = !self.recentFileUrls.isEmpty
     }
@@ -324,7 +347,7 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
             if self.recentFileUrls[index] ?? "" == "" {
                 self.recentMenuItem[index]?.isHidden = true
             } else {
-                self.recentMenuItem[index]?.title = ((self.recentFileUrls[index]! as NSString).deletingPathExtension as NSString).lastPathComponent
+                self.recentMenuItem[index]?.title = URL(string: self.recentFileUrls[index]!)!.deletingPathExtension().lastPathComponent.removingPercentEncoding ?? "Error"
                 self.recentMenuItem[index]?.isHidden = false
             }
         }
@@ -420,6 +443,14 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
         self.enableMenus()
     }
     
+    private func clearLogFile() {
+        self.resetAll(includeDevices: false)
+        self.resetSelection()
+                
+        // Enable menus
+        self.enableMenus()
+    }
+        
     private func saveAsLogFile() {
         self.chooseSaveFileUrl() { (fileUrl) in
             if let data = self.serialise() {
@@ -437,23 +468,34 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
     
     // MARK: - Utility Methods ======================================================================== -
 
-    private func resetAll() {
+    private func resetAll(includeDevices: Bool = true) {
         
         self.messagesTableView.beginUpdates()
+
         self.filteredEntries = []
+
         self.messagesTableView.endUpdates()
+
+
         self.devicesTableView.beginUpdates()
+
         self.entries = []
         self.unique = [:]
-        self.devices = [:]
-        self.deviceFromRow = []
         self.searchText = ""
-        self.matchDeviceName = ""
+
+        if includeDevices {
+            self.devices = [:]
+            self.deviceFromRow = []
+            self.matchDeviceName = ""
+        }
+
         self.devicesTableView.endUpdates()
         
-        // Pre-fill "all" device
-        _ = self.addDevice("", color: NSColor.darkGray)
-        self.devicesTableView.reloadData()
+        if includeDevices {
+            // Pre-fill "all" device
+            _ = self.addDevice("", color: NSColor.darkGray)
+            self.devicesTableView.reloadData()
+        }
 
     }
     
@@ -597,6 +639,8 @@ class LogViewController: NSViewController, NSTableViewDataSource, NSTableViewDel
             for (sequence, dictionary) in data as! [String : [String : Any]] {
                 self.processData(dictionary: dictionary, sequence: Int(sequence) ?? 0, deviceName: deviceName)
             }
+            
+            self.enableMenus()
         }
     }
     

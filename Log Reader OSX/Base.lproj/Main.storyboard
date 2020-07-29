@@ -98,8 +98,13 @@
                                                 <action selector="closeMenuSelected:" target="Ady-hI-5gd" id="45a-oW-jKW"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Clear" tag="4" keyEquivalent="x" allowsKeyEquivalentWhenHidden="YES" id="4Mo-iH-39a">
+                                            <connections>
+                                                <action selector="clearMenuSelected:" target="Ady-hI-5gd" id="OGR-Lv-Bxm"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="aJh-i4-bef"/>
-                                        <menuItem title="Save As…" tag="4" keyEquivalent="s" allowsKeyEquivalentWhenHidden="YES" id="Bw7-FT-i3A">
+                                        <menuItem title="Save As…" tag="5" keyEquivalent="s" allowsKeyEquivalentWhenHidden="YES" id="Bw7-FT-i3A">
                                             <connections>
                                                 <action selector="saveAsMenuSelected:" target="Ady-hI-5gd" id="dAX-A4-rsh"/>
                                             </connections>
